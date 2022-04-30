@@ -115,7 +115,10 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                 } 
                 dullColors(game.winPosition)
                 game.freeze()
-                // isStartNewGame()
+                if (isStartNewGame()) {
+                    game.startNewGame()
+
+                }
             } else {
                 game.changeTurn()
             }
@@ -149,11 +152,15 @@ function dullColors(winPosition) {
     })
 }
 
-// function isStartNewGame() {
-//     document.addEventListener('click', function() {
-//         game.startNewGame()
-//         Array.from( document.querySelectorAll('.move')).forEach(a => {
-//             a.className = 'move'
-//         }) 
-//     })
-// }
+function isStartNewGame() {
+    let reply = undefined
+    document.querySelector('.result').style.display = 'block'
+    let newGameBtn = document.querySelectorAll('.newgame')
+    Array.from(newGameBtn).forEach(a => {
+        a.addEventListener('click', function(e) {
+            document.querySelector('.result').style.display = 'none'
+            reply = e.target.id === 'yes' ? true : false
+        })
+    })
+    return reply
+}

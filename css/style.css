@@ -54,3 +54,9 @@ span {
 .dull {
     filter: opacity(.4);
 }
+
+.result {
+    width: fit-content;
+    margin: auto;
+    display: none;
+}
