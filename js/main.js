@@ -12,6 +12,7 @@ class Game {
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
         this.winPosition = undefined
+        this.isFreeze = false
     }
 
     placeMove(move) {
@@ -23,7 +24,9 @@ class Game {
     isValidMove(move) {
         let col = +move.id[1]
         let row = +move.id[2]
-        if (this.moves[col][row] === 0) {
+        if (this.isFreeze) {
+            return false
+        } else if (this.moves[col][row] === 0) {
             return true
         } else {
             return false
@@ -66,7 +69,6 @@ class Game {
         function isWinningPosition(arr, winPosition) {
             let result = arr.map((a, i) => a === winPosition[i] ? true : winPosition[i] === 0 ? true : false).every(a => a === true)
             if (result) {
-                console.log(winPosition, game.winPosition)
                 game.winPosition = winPosition
                 return true
             } else {
@@ -80,6 +82,11 @@ class Game {
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
         this.winPosition = undefined
+        this.isfreeze = false
+    }
+
+    freeze() {
+        this.isFreeze = true
     }
 
 }
@@ -93,7 +100,6 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
         // Check if move is valid
         if (game.isValidMove(move)) {
             // Place move on board
-            console.log('Before place: ' + game.turn)
             game.placeMove(move)
             move.classList.add(`p${game.turn}`)
             // Chek if game should be ended
@@ -108,16 +114,11 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                     document.querySelector('#ties').innerHTML = game.ties
                 } 
                 dullColors(game.winPosition)
-                // if (confirm('New game?')) {
-                //     game.startNewGame()
-                //     Array.from( document.querySelectorAll('.move')).forEach(a => {
-                //         a.className = 'move'
-                //     }) 
-                // }
+                game.freeze()
+                // isStartNewGame()
             } else {
                 game.changeTurn()
             }
-            console.log('After place: ' + game.turn)
         }
     }, false)
 })
@@ -142,9 +143,17 @@ function dullColors(winPosition) {
     }).filter(a => a != undefined).forEach(a => document.querySelector(`#${a}`).classList.add('winBox'))
     let moves = document.querySelectorAll('.move')
     Array.from(moves).forEach(a => {
-        console.log(a.classList)
         if (!a.classList.contains('winBox')) {
             a.classList.add('dull')
         }
     })
 }
+
+// function isStartNewGame() {
+//     document.addEventListener('click', function() {
+//         game.startNewGame()
+//         Array.from( document.querySelectorAll('.move')).forEach(a => {
+//             a.className = 'move'
+//         }) 
+//     })
+// }
