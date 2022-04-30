@@ -1,13 +1,20 @@
 // Use strict
 "use strict";
 
+// Create Local Storage
+if (localStorage.getItem('ttt_p1Score') === null) {
+    localStorage.setItem('ttt_p1Score', 0)
+    localStorage.setItem('ttt_p2Score', 0)
+    localStorage.setItem('ttt_tie', 0)
+}
+
 // Create tic-tac-toe object
 class Game {
     
     constructor() {
-        this.p1wins = 0
-        this.p2wins = 0
-        this.ties = 0
+        this.p1wins = +localStorage.getItem('ttt_p1Score')
+        this.p2wins = +localStorage.getItem('ttt_p2Score')
+        this.ties = +localStorage.getItem('ttt_tie')
         this.turn = 1
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
@@ -91,6 +98,10 @@ class Game {
 
 }
 let game = new Game
+document.querySelector('#p1Score').innerHTML = game.p1wins
+document.querySelector('#p2Score').innerHTML = game.p2wins
+document.querySelector('#ties').innerHTML = game.ties
+
 
 // Listen for placements
 Array.from( document.querySelectorAll('.box') ).forEach(a => {
@@ -119,6 +130,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
 
                 } 
                 dullColors(game.winPosition)
+                saveScores()
                 game.freeze()
                 isStartNewGame()
                 // if (isStartNewGame()) {
@@ -180,3 +192,10 @@ Array.from(newGameBtn).forEach(a => {
     })
     
 })
+
+function saveScores() {
+    // Local storage
+    localStorage.setItem('ttt_p1Score', game.p1wins)
+    localStorage.setItem('ttt_p2Score', game.p2wins)
+    localStorage.setItem('ttt_tie', game.ties)
+}
