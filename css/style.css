@@ -31,7 +31,7 @@ span {
     justify-content: center;
 }
 
-.piece {
+.move {
     width: 50%;
     aspect-ratio: 1;
     transition: opacity 0.5s ease;

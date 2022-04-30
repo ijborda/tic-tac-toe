@@ -1,10 +1,6 @@
 // Use strict
 "use strict";
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // Create tic-tac-toe object
 class Game {
     
@@ -82,7 +78,7 @@ let game = new Game
 Array.from( document.querySelectorAll('.box') ).forEach(a => {
     a.addEventListener('click', function (e) {
         // Get move
-        let move = e.target.querySelector('.piece')
+        let move = e.target.querySelector('.move')
         // Check if move is valid
         if (game.isValidMove(move)) {
             // Place move on board
@@ -100,8 +96,8 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                     document.querySelector('#ties').innerHTML = game.ties
                 }
                 game.startNewGame()
-                Array.from( document.querySelectorAll('.piece')).forEach(a => {
-                    a.className = 'piece'
+                Array.from( document.querySelectorAll('.move')).forEach(a => {
+                    a.className = 'move'
                 }) 
             } else {
                 game.changeTurn()
