@@ -82,7 +82,7 @@ class Game {
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
         this.winPosition = undefined
-        this.isfreeze = false
+        this.isFreeze = false
     }
 
     freeze() {
@@ -105,20 +105,28 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
             // Chek if game should be ended
             if (game.isGameEnd()) {
                 if (game.winner === 'Player 1') {
-                    document.querySelector('#p1Score').innerHTML = game.p1wins     
+                    document.querySelector('#p1Score').innerHTML = game.p1wins
+                    document.querySelector('.alert span').innerHTML = 'Player 1 (Red) wins. Another game?'     
                 }
                 else if (game.winner === 'Player 2') {
                     document.querySelector('#p2Score').innerHTML = game.p2wins
+                    document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'     
+
                 }
                 else if (game.winner === 'Tie') {
                     document.querySelector('#ties').innerHTML = game.ties
+                    document.querySelector('.alert span').innerHTML = 'Player 2 (Blue) wins. Another game?'     
+
                 } 
                 dullColors(game.winPosition)
                 game.freeze()
-                if (isStartNewGame()) {
-                    game.startNewGame()
-
-                }
+                isStartNewGame()
+                // if (isStartNewGame()) {
+                //     game.startNewGame()
+                //     Array.from( document.querySelectorAll('.move')).forEach(a => {
+                //         a.className = 'move'
+                //     }) 
+                // }
             } else {
                 game.changeTurn()
             }
@@ -155,12 +163,20 @@ function dullColors(winPosition) {
 function isStartNewGame() {
     let reply = undefined
     document.querySelector('.result').style.display = 'block'
-    let newGameBtn = document.querySelectorAll('.newgame')
-    Array.from(newGameBtn).forEach(a => {
-        a.addEventListener('click', function(e) {
-            document.querySelector('.result').style.display = 'none'
-            reply = e.target.id === 'yes' ? true : false
-        })
-    })
+    // console.log(reply)
     return reply
 }
+
+let newGameBtn = document.querySelectorAll('.newgame')
+Array.from(newGameBtn).forEach(a => {
+    a.addEventListener('click', function(e) {
+        document.querySelector('.result').style.display = 'none'
+        if (e.target.id === 'yes') {
+            game.startNewGame()
+            Array.from( document.querySelectorAll('.move')).forEach(a => {
+                a.className = 'move'
+            }) 
+        }
+    })
+    
+})

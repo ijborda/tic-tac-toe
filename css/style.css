@@ -60,3 +60,13 @@ span {
     margin: auto;
     display: none;
 }
+
+.p1Name {
+    color: red;
+}
+.p2Name {
+    color: blue
+}
+.button {
+    display: inline;
+}
