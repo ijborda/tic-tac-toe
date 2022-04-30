@@ -117,17 +117,18 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
             if (game.isGameEnd()) {
                 if (game.winner === 'Player 1') {
                     document.querySelector('#p1Score').innerHTML = game.p1wins
+                    document.querySelector('.alert').className = 'alert alert-danger'
                     document.querySelector('.alert span').innerHTML = 'Player 1 (Red) wins. Another game?'     
                 }
                 else if (game.winner === 'Player 2') {
                     document.querySelector('#p2Score').innerHTML = game.p2wins
-                    document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'     
-
+                    document.querySelector('.alert').className = 'alert alert-primary'
+                    document.querySelector('.alert span').innerHTML = 'Player 2 (Blue) wins. Another game?' 
                 }
                 else if (game.winner === 'Tie') {
                     document.querySelector('#ties').innerHTML = game.ties
-                    document.querySelector('.alert span').innerHTML = 'Player 2 (Blue) wins. Another game?'     
-
+                    document.querySelector('.alert').className = 'alert alert-secondary'
+                    document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'   
                 } 
                 dullColors(game.winPosition)
                 saveScores()
@@ -147,7 +148,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
 })
 
 function dullColors(winPosition) {
-    winPosition.map((a, i) => {
+    (winPosition || []).map((a, i) => {
         if (a === 0) {
             return undefined
         } else {
@@ -161,7 +162,7 @@ function dullColors(winPosition) {
                 6: 'm20',
                 7: 'm21',
                 8: 'm22'
-            }[i]
+            }[i] || ['m00', 'm01', 'm02', 'm10', 'm11', 'm12', 'm20', 'm21', 'm22']
         }
     }).filter(a => a != undefined).forEach(a => document.querySelector(`#${a}`).classList.add('winBox'))
     let moves = document.querySelectorAll('.move')
@@ -199,3 +200,15 @@ function saveScores() {
     localStorage.setItem('ttt_p2Score', game.p2wins)
     localStorage.setItem('ttt_tie', game.ties)
 }
+
+document.querySelector('#clear').addEventListener('click', function() {
+    localStorage.clear('ttt_p1Score')
+    localStorage.clear('ttt_p2Score')
+    localStorage.clear('ttt_tie')
+    game.p1wins = 0
+    game.p2wins = 0
+    game.ties = 0
+    document.querySelector('#p1Score').innerHTML = game.p1wins
+    document.querySelector('#p2Score').innerHTML = game.p2wins
+    document.querySelector('#ties').innerHTML = game.ties
+})
