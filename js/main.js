@@ -11,17 +11,18 @@ class Game {
         this.turn = 1
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
+        this.winPosition = undefined
     }
 
     placeMove(move) {
-        let col = +move.id.split('-')[0]
-        let row = +move.id.split('-')[1]
+        let col = +move.id[1]
+        let row = +move.id[2]
         this.moves[col][row] = this.turn
     }
 
     isValidMove(move) {
-        let col = +move.id.split('-')[0]
-        let row = +move.id.split('-')[1]
+        let col = +move.id[1]
+        let row = +move.id[2]
         if (this.moves[col][row] === 0) {
             return true
         } else {
@@ -42,8 +43,10 @@ class Game {
                             [0, 0, 0, 0, 0, 0, 1, 1, 1],
                             [1, 0, 0, 0, 1, 0, 0, 0, 1],
                             [0, 0, 1, 0, 1, 0, 1, 0, 0]]
-        let isP1win = winPositions.some(pos => isWinningPosition([].concat(...this.moves).map(a => a === 1 ? 1 : 0), pos))
-        let isP2win = winPositions.some(pos => isWinningPosition([].concat(...this.moves).map(a => a === 2 ? 1 : 0), pos))
+        let p1Position = [].concat(...this.moves).map(a => a === 1 ? 1 : 0)
+        let p2Position = [].concat(...this.moves).map(a => a === 2 ? 1 : 0)
+        let isP1win = winPositions.some(pos => isWinningPosition(p1Position, pos))
+        let isP2win = winPositions.some(pos => isWinningPosition(p2Position, pos))
         let isAllFilled = [].concat(...this.moves).every(a => a !== 0)
         if (isP1win === false && isP2win === false && isAllFilled === true) {
             this.winner = 'Tie'
@@ -60,8 +63,15 @@ class Game {
         } else {
             return false
         }
-        function isWinningPosition(arr, winPositions) {
-            return arr.map((a, i) => a === winPositions[i] ? true : winPositions[i] ? false : true).every(a => a === true)
+        function isWinningPosition(arr, winPosition) {
+            let result = arr.map((a, i) => a === winPosition[i] ? true : winPosition[i] === 0 ? true : false).every(a => a === true)
+            if (result) {
+                console.log(winPosition, game.winPosition)
+                game.winPosition = winPosition
+                return true
+            } else {
+                return false
+            }
         }
     }
 
@@ -69,6 +79,7 @@ class Game {
         this.turn = 1
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
+        this.winPosition = undefined
     }
 
 }
@@ -82,6 +93,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
         // Check if move is valid
         if (game.isValidMove(move)) {
             // Place move on board
+            console.log('Before place: ' + game.turn)
             game.placeMove(move)
             move.classList.add(`p${game.turn}`)
             // Chek if game should be ended
@@ -89,19 +101,50 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                 if (game.winner === 'Player 1') {
                     document.querySelector('#p1Score').innerHTML = game.p1wins     
                 }
-                if (game.winner === 'Player 2') {
+                else if (game.winner === 'Player 2') {
                     document.querySelector('#p2Score').innerHTML = game.p2wins
                 }
-                if (game.winner === 'Tie') {
+                else if (game.winner === 'Tie') {
                     document.querySelector('#ties').innerHTML = game.ties
-                }
-                game.startNewGame()
-                Array.from( document.querySelectorAll('.move')).forEach(a => {
-                    a.className = 'move'
-                }) 
+                } 
+                dullColors(game.winPosition)
+                // if (confirm('New game?')) {
+                //     game.startNewGame()
+                //     Array.from( document.querySelectorAll('.move')).forEach(a => {
+                //         a.className = 'move'
+                //     }) 
+                // }
             } else {
                 game.changeTurn()
             }
+            console.log('After place: ' + game.turn)
         }
     }, false)
 })
+
+function dullColors(winPosition) {
+    winPosition.map((a, i) => {
+        if (a === 0) {
+            return undefined
+        } else {
+            return {
+                0: 'm00',
+                1: 'm01',
+                2: 'm02',
+                3: 'm10',
+                4: 'm11',
+                5: 'm12',
+                6: 'm20',
+                7: 'm21',
+                8: 'm22'
+            }[i]
+        }
+    }).filter(a => a != undefined).forEach(a => document.querySelector(`#${a}`).classList.add('winBox'))
+    let moves = document.querySelectorAll('.move')
+    Array.from(moves).forEach(a => {
+        console.log(a.classList)
+        if (!a.classList.contains('winBox')) {
+            a.classList.add('dull')
+        }
+    })
+}

@@ -50,3 +50,7 @@ span {
     background: blue;
     opacity: 1;
 }
+
+.dull {
+    filter: opacity(.4);
+}
