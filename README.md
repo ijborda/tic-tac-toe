@@ -11,7 +11,7 @@ Link to project:[https://imarijoyborda.com/tic-tac-toe/](https://imarijoyborda.c
 ## How To Use
 Play the classic tic-tac-toe. Click on an empty grid to place your move. Rules for classic tic-tac-toe applies here. 
 
-Number of wins for each player are recorded on the local storage. To clear this record, press the yellow button below that says `Press Me to Clear Scores!` 
+Number of wins for each player are recorded and saved on the local storage. To clear this record, press the yellow button below that says `Press Me to Clear Scores!` 
 
 ## How It's Made
 Tech used: HTML, CSS, Bootstrap, and JavaScript.
