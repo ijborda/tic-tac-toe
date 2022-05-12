@@ -121,7 +121,7 @@ class Game {
     }
 
     clearSave() {
-        // Clear scores local storage and reset to 0
+        // Clear scores in local storage and reset to 0
         localStorage.clear('ttt_p1Score')
         localStorage.clear('ttt_p2Score')
         localStorage.clear('ttt_tie')
@@ -185,7 +185,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                 game.save()
                 // Freeze game
                 game.freeze()
-                // Start new game
+                // Start new game when user agreed on the prompt
                 isStartNewGame()
             // If game is not yet ended, change turn
             } else {
