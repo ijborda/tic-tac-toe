@@ -141,17 +141,17 @@ class Game {
  * DO ON LOAD
  */
 
-// Start Game
+// Start game
 let game = new Game
 
-// Create Local Storage
+// Create local storage
 if (localStorage.getItem('ttt_p1Score') === null) {
     localStorage.setItem('ttt_p1Score', 0)
     localStorage.setItem('ttt_p2Score', 0)
     localStorage.setItem('ttt_tie', 0)
 }
 
-// Display Scores
+// Display current scores in dom
 document.querySelector('#p1Score').innerHTML = game.p1wins
 document.querySelector('#p2Score').innerHTML = game.p2wins
 document.querySelector('#ties').innerHTML = game.ties
@@ -192,7 +192,7 @@ document.querySelectorAll('.box').forEach(a => {
                     document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'   
                 } 
                 // Highlight winning position
-                dullColors(game.winPosition)
+                highlight(game.winPosition)
                 // Save scores
                 game.save()
                 // Freeze game
@@ -240,7 +240,7 @@ function clearBoard() {
 }
 
 // Helper function: Highlight winning position
-function dullColors(winPosition) {
+function highlight(winPosition) {
     (winPosition || []).map((a, i) => {
         if (a === 0) {
             return undefined
