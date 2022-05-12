@@ -1,6 +1,10 @@
 // Use strict
 "use strict";
 
+/**
+ * OBJECT
+ */
+
 // Create tic-tac-toe object
 class Game {
     
@@ -133,6 +137,10 @@ class Game {
 }
 
 
+/**
+ * DO ON LOAD
+ */
+
 // Start Game
 let game = new Game
 
@@ -149,8 +157,12 @@ document.querySelector('#p2Score').innerHTML = game.p2wins
 document.querySelector('#ties').innerHTML = game.ties
 
 
+/**
+ * EVENT LISTENERS
+ */
+
 // Listen for filling of boxes
-Array.from( document.querySelectorAll('.box') ).forEach(a => {
+document.querySelectorAll('.box').forEach(a => {
     a.addEventListener('click', function (e) {
         // Get move
         let move = e.target.querySelector('.move')
@@ -186,7 +198,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                 // Freeze game
                 game.freeze()
                 // Start new game when user agreed on the prompt
-                isStartNewGame()
+                showMessage()
             // If game is not yet ended, change turn
             } else {
                 game.changeTurn()
@@ -203,6 +215,29 @@ document.querySelector('#clear').addEventListener('click', function() {
     document.querySelector('#ties').innerHTML = game.ties
 })
 
+// Listen for new games
+document.querySelector('.newgame').addEventListener('click', function() {
+    // Hide message
+    document.querySelector('.result').style.display = 'none'
+    // Start new game
+    game.startNewGame()
+    clearBoard()  
+})
+
+
+/**
+ * FUNCTIONS
+ */
+
+// Helper function: Show result and ask user for new game
+function showMessage() {
+    document.querySelector('.result').style.display = 'block'
+}
+
+// Helper function: Clear board
+function clearBoard() {
+    document.querySelectorAll('.move').forEach(a => a.className = 'move')
+}
 
 // Helper function: Highlight winning position
 function dullColors(winPosition) {
@@ -223,30 +258,9 @@ function dullColors(winPosition) {
             }[i] || ['m00', 'm01', 'm02', 'm10', 'm11', 'm12', 'm20', 'm21', 'm22']
         }
     }).filter(a => a != undefined).forEach(a => document.querySelector(`#${a}`).classList.add('winBox'))
-    let moves = document.querySelectorAll('.move')
-    Array.from(moves).forEach(a => {
+    document.querySelectorAll('.move').forEach(a => {
         if (!a.classList.contains('winBox')) {
             a.classList.add('dull')
         }
     })
 }
-
-// Helper function: Ask if user wants new game
-function isStartNewGame() {
-    let reply = undefined
-    document.querySelector('.result').style.display = 'block'
-    return reply
-}
-let newGameBtn = document.querySelectorAll('.newgame')
-Array.from(newGameBtn).forEach(a => {
-    a.addEventListener('click', function(e) {
-        document.querySelector('.result').style.display = 'none'
-        if (e.target.id === 'yes') {
-            game.startNewGame()
-            Array.from( document.querySelectorAll('.move')).forEach(a => {
-                a.className = 'move'
-            }) 
-        }
-    })
-    
-})
