@@ -1,13 +1,6 @@
 // Use strict
 "use strict";
 
-// Create Local Storage
-if (localStorage.getItem('ttt_p1Score') === null) {
-    localStorage.setItem('ttt_p1Score', 0)
-    localStorage.setItem('ttt_p2Score', 0)
-    localStorage.setItem('ttt_tie', 0)
-}
-
 // Create tic-tac-toe object
 class Game {
     
@@ -126,8 +119,29 @@ class Game {
         localStorage.setItem('ttt_tie', game.ties)
     }
 
+    clearSave() {
+        localStorage.clear('ttt_p1Score')
+        localStorage.clear('ttt_p2Score')
+        localStorage.clear('ttt_tie')
+        game.p1wins = 0
+        game.p2wins = 0
+        game.ties = 0
+    }
+
 }
+
+
+// Start Game
 let game = new Game
+
+// Create Local Storage
+if (localStorage.getItem('ttt_p1Score') === null) {
+    localStorage.setItem('ttt_p1Score', 0)
+    localStorage.setItem('ttt_p2Score', 0)
+    localStorage.setItem('ttt_tie', 0)
+}
+
+// Display Scores
 document.querySelector('#p1Score').innerHTML = game.p1wins
 document.querySelector('#p2Score').innerHTML = game.p2wins
 document.querySelector('#ties').innerHTML = game.ties
@@ -179,6 +193,16 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
     }, false)
 })
 
+// Listen for clearing of scores
+document.querySelector('#clear').addEventListener('click', function() {
+    game.clearSave()
+    document.querySelector('#p1Score').innerHTML = game.p1wins
+    document.querySelector('#p2Score').innerHTML = game.p2wins
+    document.querySelector('#ties').innerHTML = game.ties
+})
+
+
+// Helper function: Highlight winning position
 function dullColors(winPosition) {
     (winPosition || []).map((a, i) => {
         if (a === 0) {
@@ -205,12 +229,12 @@ function dullColors(winPosition) {
     })
 }
 
+// Helper function: Ask if user wants new game
 function isStartNewGame() {
     let reply = undefined
     document.querySelector('.result').style.display = 'block'
     return reply
 }
-
 let newGameBtn = document.querySelectorAll('.newgame')
 Array.from(newGameBtn).forEach(a => {
     a.addEventListener('click', function(e) {
@@ -223,16 +247,4 @@ Array.from(newGameBtn).forEach(a => {
         }
     })
     
-})
-
-document.querySelector('#clear').addEventListener('click', function() {
-    localStorage.clear('ttt_p1Score')
-    localStorage.clear('ttt_p2Score')
-    localStorage.clear('ttt_tie')
-    game.p1wins = 0
-    game.p2wins = 0
-    game.ties = 0
-    document.querySelector('#p1Score').innerHTML = game.p1wins
-    document.querySelector('#p2Score').innerHTML = game.p2wins
-    document.querySelector('#ties').innerHTML = game.ties
 })
