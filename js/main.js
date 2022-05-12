@@ -39,7 +39,7 @@ class Game {
             // Disallow the move if players can't play
             return false
         } else if (this.moves[col][row] === 0) {
-            // Move is valid if box is noy yet filled
+            // Move is valid if box is not yet filled
             return true
         } else {
             // On other cases, move is not valid
@@ -75,12 +75,12 @@ class Game {
             this.ties += 1
             return true
         } else if (isP1win === true && isP2win === false) {
-            // Game ends when p1 has winning position (Player 1)
+            // Game ends when p1 has winning position (Winner: Player 1)
             this.winner = 'Player 1'
             this.p1wins += 1
             return true
         } else if (isP1win === false && isP2win === true) {
-            // Game ends when p2 has winning position (Player 2)
+            // Game ends when p2 has winning position (Winner: Player 2)
             this.winner = 'Player 2'
             this.p2wins += 1
             return true
@@ -114,12 +114,14 @@ class Game {
     }
 
     save() {
+        // Save current scores to local storage
         localStorage.setItem('ttt_p1Score', game.p1wins)
         localStorage.setItem('ttt_p2Score', game.p2wins)
         localStorage.setItem('ttt_tie', game.ties)
     }
 
     clearSave() {
+        // Clear scores local storage and reset to 0
         localStorage.clear('ttt_p1Score')
         localStorage.clear('ttt_p2Score')
         localStorage.clear('ttt_tie')
