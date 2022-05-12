@@ -68,10 +68,13 @@ class Game {
                             [0, 0, 0, 0, 0, 0, 1, 1, 1],
                             [1, 0, 0, 0, 1, 0, 0, 0, 1],
                             [0, 0, 1, 0, 1, 0, 1, 0, 0]]
+        // Get current moves of p1 and check if any is a winning position
         let p1Position = [].concat(...this.moves).map(a => a === 1 ? 1 : 0)
-        let p2Position = [].concat(...this.moves).map(a => a === 2 ? 1 : 0)
         let isP1win = winPositions.some(pos => isWinningPosition(p1Position, pos))
+        // Get current moves of p2 and check if any is a winning position
+        let p2Position = [].concat(...this.moves).map(a => a === 2 ? 1 : 0)
         let isP2win = winPositions.some(pos => isWinningPosition(p2Position, pos))
+        // Get current moves and check if all boxes are filled
         let isAllFilled = [].concat(...this.moves).every(a => a !== 0)
         if (isP1win === false && isP2win === false && isAllFilled === true) {
             // Game ends when all box are filled (Tie)
@@ -124,43 +127,45 @@ document.querySelector('#p2Score').innerHTML = game.p2wins
 document.querySelector('#ties').innerHTML = game.ties
 
 
-// Listen for placements
+// Listen for filling of boxes
 Array.from( document.querySelectorAll('.box') ).forEach(a => {
     a.addEventListener('click', function (e) {
         // Get move
         let move = e.target.querySelector('.move')
-        // Check if move is valid
+        // Check if move is valid, otherwise do nothing
         if (game.isValidMove(move)) {
-            // Place move on board
+            // Place move on board and update dom
             game.placeMove(move)
             move.classList.add(`p${game.turn}`)
             // Chek if game should be ended
             if (game.isGameEnd()) {
+                // Update DOM if p1 won
                 if (game.winner === 'Player 1') {
                     document.querySelector('#p1Score').innerHTML = game.p1wins
                     document.querySelector('.alert').className = 'alert alert-danger'
                     document.querySelector('.alert span').innerHTML = 'Player 1 (Red) wins. Another game?'     
                 }
+                // Update DOM if p2 won
                 else if (game.winner === 'Player 2') {
                     document.querySelector('#p2Score').innerHTML = game.p2wins
                     document.querySelector('.alert').className = 'alert alert-primary'
                     document.querySelector('.alert span').innerHTML = 'Player 2 (Blue) wins. Another game?' 
                 }
+                // Update DOM if tie
                 else if (game.winner === 'Tie') {
                     document.querySelector('#ties').innerHTML = game.ties
                     document.querySelector('.alert').className = 'alert alert-secondary'
                     document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'   
                 } 
+                // Highlight winning position
                 dullColors(game.winPosition)
+                // Save scores
                 saveScores()
+                // Freeze game
                 game.freeze()
+                // Start new game
                 isStartNewGame()
-                // if (isStartNewGame()) {
-                //     game.startNewGame()
-                //     Array.from( document.querySelectorAll('.move')).forEach(a => {
-                //         a.className = 'move'
-                //     }) 
-                // }
+            // If game is not yet ended, change turn
             } else {
                 game.changeTurn()
             }
@@ -197,7 +202,6 @@ function dullColors(winPosition) {
 function isStartNewGame() {
     let reply = undefined
     document.querySelector('.result').style.display = 'block'
-    // console.log(reply)
     return reply
 }
 
