@@ -120,6 +120,12 @@ class Game {
         this.isFreeze = true
     }
 
+    save() {
+        localStorage.setItem('ttt_p1Score', game.p1wins)
+        localStorage.setItem('ttt_p2Score', game.p2wins)
+        localStorage.setItem('ttt_tie', game.ties)
+    }
+
 }
 let game = new Game
 document.querySelector('#p1Score').innerHTML = game.p1wins
@@ -160,7 +166,7 @@ Array.from( document.querySelectorAll('.box') ).forEach(a => {
                 // Highlight winning position
                 dullColors(game.winPosition)
                 // Save scores
-                saveScores()
+                game.save()
                 // Freeze game
                 game.freeze()
                 // Start new game
@@ -218,13 +224,6 @@ Array.from(newGameBtn).forEach(a => {
     })
     
 })
-
-function saveScores() {
-    // Local storage
-    localStorage.setItem('ttt_p1Score', game.p1wins)
-    localStorage.setItem('ttt_p2Score', game.p2wins)
-    localStorage.setItem('ttt_tie', game.ties)
-}
 
 document.querySelector('#clear').addEventListener('click', function() {
     localStorage.clear('ttt_p1Score')
