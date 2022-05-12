@@ -8,13 +8,13 @@
 // Create tic-tac-toe object
 class Game {
     
-    constructor() {
+    constructor(p1wins, p2wins, ties) {
         // Current p1 score
-        this.p1wins = +localStorage.getItem('ttt_p1Score')
+        this.p1wins = p1wins
         // Current p2 score
-        this.p2wins = +localStorage.getItem('ttt_p2Score')
+        this.p2wins = p2wins
         // Current ties
-        this.ties = +localStorage.getItem('ttt_tie')
+        this.ties = ties
         // P1 is first turn
         this.turn = 1
         // Board is not filled on start (0 = not filled, 1 = filled by p1, 2 = filled by p2)
@@ -123,6 +123,12 @@ class Game {
         localStorage.setItem('ttt_p2Score', game.p2wins)
         localStorage.setItem('ttt_tie', game.ties)
     }
+    
+    restoreSave() {
+        this.p1wins = +localStorage.getItem('ttt_p1Score')
+        this.p2wins = +localStorage.getItem('ttt_p2Score')
+        this.ties = +localStorage.getItem('ttt_tie')
+    }
 
     clearSave() {
         // Clear scores in local storage and reset to 0
@@ -141,8 +147,11 @@ class Game {
  * DO ON LOAD
  */
 
-// Start game
+// Start new game
 let game = new Game
+
+// Restore saved scores
+game.restoreSave()
 
 // Create local storage
 if (localStorage.getItem('ttt_p1Score') === null) {
@@ -152,53 +161,35 @@ if (localStorage.getItem('ttt_p1Score') === null) {
 }
 
 // Display current scores in dom
-document.querySelector('#p1Score').innerHTML = game.p1wins
-document.querySelector('#p2Score').innerHTML = game.p2wins
-document.querySelector('#ties').innerHTML = game.ties
+showScoresDOM()
 
 
 /**
  * EVENT LISTENERS
  */
 
-// Listen for filling of boxes
+// Listen for moves
 document.querySelectorAll('.box').forEach(a => {
     a.addEventListener('click', function (e) {
-        // Get move
+        // Get coordinates of move
         let move = e.target.querySelector('.move')
         // Check if move is valid, otherwise do nothing
         if (game.isValidMove(move)) {
             // Place move on board and update dom
             game.placeMove(move)
             move.classList.add(`p${game.turn}`)
-            // Chek if game should be ended
+            // If game is ended, update dom and show message
             if (game.isGameEnd()) {
-                // Update DOM if p1 won
-                if (game.winner === 'Player 1') {
-                    document.querySelector('#p1Score').innerHTML = game.p1wins
-                    document.querySelector('.alert').className = 'alert alert-danger'
-                    document.querySelector('.alert span').innerHTML = 'Player 1 (Red) wins. Another game?'     
-                }
-                // Update DOM if p2 won
-                else if (game.winner === 'Player 2') {
-                    document.querySelector('#p2Score').innerHTML = game.p2wins
-                    document.querySelector('.alert').className = 'alert alert-primary'
-                    document.querySelector('.alert span').innerHTML = 'Player 2 (Blue) wins. Another game?' 
-                }
-                // Update DOM if tie
-                else if (game.winner === 'Tie') {
-                    document.querySelector('#ties').innerHTML = game.ties
-                    document.querySelector('.alert').className = 'alert alert-secondary'
-                    document.querySelector('.alert span').innerHTML = 'It is a tie. Another game?'   
-                } 
-                // Highlight winning position
-                highlight(game.winPosition)
+                // Highlight winning position 
+                highlightWinDOM(game.winPosition)
+                // Show current scores
+                showScoresDOM()
                 // Save scores
                 game.save()
                 // Freeze game
                 game.freeze()
-                // Start new game when user agreed on the prompt
-                showMessage()
+                // Show message and promp for new game
+                showMessageDOM()
             // If game is not yet ended, change turn
             } else {
                 game.changeTurn()
@@ -209,19 +200,17 @@ document.querySelectorAll('.box').forEach(a => {
 
 // Listen for clearing of scores
 document.querySelector('#clear').addEventListener('click', function() {
+    // Clear scores in local storage and update reset scores in dom
     game.clearSave()
-    document.querySelector('#p1Score').innerHTML = game.p1wins
-    document.querySelector('#p2Score').innerHTML = game.p2wins
-    document.querySelector('#ties').innerHTML = game.ties
+    showScoresDOM()
 })
 
-// Listen for new games
+// Listen for new game
 document.querySelector('.newgame').addEventListener('click', function() {
-    // Hide message
+    // Hide message and start new game
     document.querySelector('.result').style.display = 'none'
-    // Start new game
     game.startNewGame()
-    clearBoard()  
+    clearBoardDOM()  
 })
 
 
@@ -230,17 +219,38 @@ document.querySelector('.newgame').addEventListener('click', function() {
  */
 
 // Helper function: Show result and ask user for new game
-function showMessage() {
+function showMessageDOM() { 
+    // Determine style and text depending on the game result
+    let alert = document.querySelector('.alert')
+    let message = document.querySelector('.alert span')
+    if (game.winner === 'Player 1') {
+        alert.className = 'alert alert-danger'
+        .innerHTML = 'Player 1 (Red) wins. Another game?'     
+    } else if (game.winner === 'Player 2') {
+        alert.className = 'alert alert-primary'
+        message.innerHTML = 'Player 2 (Blue) wins. Another game?' 
+    } else if (game.winner === 'Tie') {
+        alert.className = 'alert alert-secondary'
+        message.innerHTML = 'It is a tie. Another game?'   
+    } 
+    // Show message
     document.querySelector('.result').style.display = 'block'
 }
 
 // Helper function: Clear board
-function clearBoard() {
+function clearBoardDOM() {
     document.querySelectorAll('.move').forEach(a => a.className = 'move')
 }
 
+// Helper function: Show scores in dom
+function showScoresDOM() {
+    document.querySelector('#p1Score').innerHTML = game.p1wins
+    document.querySelector('#p2Score').innerHTML = game.p2wins
+    document.querySelector('#ties').innerHTML = game.ties
+}
+
 // Helper function: Highlight winning position
-function highlight(winPosition) {
+function highlightWinDOM(winPosition) {
     (winPosition || []).map((a, i) => {
         if (a === 0) {
             return undefined
