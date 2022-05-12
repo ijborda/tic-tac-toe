@@ -150,15 +150,15 @@ class Game {
 // Start new game
 let game = new Game
 
-// Restore saved scores
-game.restoreSave()
-
-// Create local storage
+// Create local storage if there are no saved scores
 if (localStorage.getItem('ttt_p1Score') === null) {
     localStorage.setItem('ttt_p1Score', 0)
     localStorage.setItem('ttt_p2Score', 0)
     localStorage.setItem('ttt_tie', 0)
 }
+
+// Restore saved scores
+game.restoreSave()
 
 // Display current scores in dom
 showScoresDOM()
