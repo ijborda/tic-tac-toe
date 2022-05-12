@@ -12,35 +12,50 @@ if (localStorage.getItem('ttt_p1Score') === null) {
 class Game {
     
     constructor() {
+        // Current p1 score
         this.p1wins = +localStorage.getItem('ttt_p1Score')
+        // Current p2 score
         this.p2wins = +localStorage.getItem('ttt_p2Score')
+        // Current ties
         this.ties = +localStorage.getItem('ttt_tie')
+        // P1 is first turn
         this.turn = 1
+        // Board is not filled on start (0 = not filled, 1 = filled by p1, 2 = filled by p2)
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        // No winner on start (Tie, Player 1, or Player 2)
         this.winner = undefined
+        // No winning position on start
         this.winPosition = undefined
+        // Players can play on start
         this.isFreeze = false
     }
 
     placeMove(move) {
+        // Get coordinates of the filled box
         let col = +move.id[1]
         let row = +move.id[2]
+        // Update this.moves
         this.moves[col][row] = this.turn
     }
 
     isValidMove(move) {
+        // Get coordinates of the filled box
         let col = +move.id[1]
         let row = +move.id[2]
         if (this.isFreeze) {
+            // Disallow the move if players can't play
             return false
         } else if (this.moves[col][row] === 0) {
+            // Move is valid if box is noy yet filled
             return true
         } else {
+            // On other cases, move is not valid
             return false
         }
     }
 
     changeTurn() {
+        // Change turn
         this.turn = this.turn === 1 ? 2 : 1
     }
 
@@ -59,18 +74,22 @@ class Game {
         let isP2win = winPositions.some(pos => isWinningPosition(p2Position, pos))
         let isAllFilled = [].concat(...this.moves).every(a => a !== 0)
         if (isP1win === false && isP2win === false && isAllFilled === true) {
+            // Game ends when all box are filled (Tie)
             this.winner = 'Tie'
             this.ties += 1
             return true
         } else if (isP1win === true && isP2win === false) {
+            // Game ends when p1 has winning position (Player 1)
             this.winner = 'Player 1'
             this.p1wins += 1
             return true
         } else if (isP1win === false && isP2win === true) {
+            // Game ends when p2 has winning position (Player 2)
             this.winner = 'Player 2'
             this.p2wins += 1
             return true
         } else {
+            // On other cases, game has not yet ended
             return false
         }
         function isWinningPosition(arr, winPosition) {
@@ -85,7 +104,8 @@ class Game {
     }
 
     startNewGame() {
-        this.turn = 1
+        // Reset game and switch turns
+        this.turn = this.turn === 1 ? 2 : 1
         this.moves = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         this.winner = undefined
         this.winPosition = undefined
@@ -93,6 +113,7 @@ class Game {
     }
 
     freeze() {
+        // Disallow players to fill boxes
         this.isFreeze = true
     }
 
