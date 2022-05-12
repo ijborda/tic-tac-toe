@@ -215,7 +215,7 @@ document.querySelector('.newgame').addEventListener('click', function() {
 
 
 /**
- * FUNCTIONS
+ * FUNCTIONS FOR DOM MANIPULATIONS
  */
 
 // Helper function: Show result and ask user for new game
