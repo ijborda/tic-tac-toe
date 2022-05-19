@@ -1,4 +1,4 @@
-# Tic-Tac-Toe
+# Tic-Tac-Toe | Have Fun
 
 Use [Tic-Tac-Toe](https://imarijoyborda.com/tic-tac-toe/) to play tic-tac-toe with a friend (local). 
 
@@ -23,3 +23,10 @@ There are still lots that need to be improved in this web application. Some plan
 * Support custimization of color and shape of each player's move.
 
 Contributions are also very welcome! Just issue a pull request.
+
+## Thanks for checking it out!
+
+Check out my other projects:
+* [Codie | See your Codewars Stats at a Glance](https://github.com/ijborda/codie)
+* [Daily Inspiration | Start your Day Inspired](https://github.com/ijborda/daily-inspiration)
+* [COVID-19 Statistics | A COVID-19 Monitoring App](https://github.com/ijborda/covid19-statistics)
