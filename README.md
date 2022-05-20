@@ -14,7 +14,7 @@ Play the classic tic-tac-toe. Click on an empty grid to place your move. Rules f
 Number of wins for each player are recorded and saved on the local storage. To clear this record, press the yellow button below that says `Press Me to Clear Scores!` 
 
 ## How It's Made
-Tech used: HTML, CSS, Bootstrap, and JavaScript.
+Tech used: HTML, CSS, Bootstrap, and JavaScript. <a href="https://www.flaticon.com/free-icons/tic-tac-toe" title="tic tac toe icons">Tic tac toe icons created by Freepik - Flaticon</a>
 
 ## Future Improvements
 There are still lots that need to be improved in this web application. Some plans are:
