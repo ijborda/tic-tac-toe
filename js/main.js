@@ -225,7 +225,7 @@ function showMessageDOM() {
     let message = document.querySelector('.alert span')
     if (game.winner === 'Player 1') {
         alert.className = 'alert alert-danger'
-        .innerHTML = 'Player 1 (Red) wins. Another game?'     
+        message.innerHTML = 'Player 1 (Red) wins. Another game?'     
     } else if (game.winner === 'Player 2') {
         alert.className = 'alert alert-primary'
         message.innerHTML = 'Player 2 (Blue) wins. Another game?' 
